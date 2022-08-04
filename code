@@ -1,0 +1,131 @@
+
+if __name__ == '__main__':
+    import undetected_chromedriver.v2 as uc
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    from seleniumwire.undetected_chromedriver.v2 import Chrome, ChromeOptions
+    from selenium.webdriver.common.keys import Keys
+    import selenium
+    import os
+    from getmac import get_mac_address as gma
+    import glob
+    import time
+    option = uc.ChromeOptions()
+    
+    # option.add_argument('--disable-web-security')
+    # option.add_argument('--user-data-dir')
+    # option.add_argument('--allow-running-insecure-content')
+    # option.add_argument('--remote-debugging-port=http://localhost:9222')
+    # option.add_argument('--user-data-dir="C:\localhost"')
+    # option.add_argument('"C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9111 --user-data-dir="C:\localhost" --disable-gpu')
+    
+    option.add_argument('--user-agent=Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.222 Safari/537.36')
+    option.add_argument("--window-size=1366,768")
+    # option.add_argument('--headless')
+    # option.add_argument('--disable-gpu')
+    driver = uc.Chrome(options=option )
+
+
+    with driver:
+
+        driver.get('https://pipedream.com/auth/login')
+        time.sleep(4)
+        driver.get_screenshot_as_file("pp.png")
+        #LOGIN
+        from time import sleep
+        email = driver.find_element(By.XPATH,'//*[@placeholder="Email (or username)"]').send_keys('ahmedyehiaabd@gmail.com')
+        sleep(1.5)
+        password = driver.find_element(By.XPATH,'//*[@placeholder="Password"]').send_keys('01539570')
+        sleep(1.5)
+        login = driver.find_element(By.XPATH,'//*[@id="root"]/div/div/div[3]/div/div/form/div[3]/button').click()
+        sleep(4)
+
+        account = driver.find_element(By.XPATH,'//*[@href="/accounts"]').click()
+        WebDriverWait(driver, 120).until(EC.element_to_be_clickable((By.XPATH, '//*[@data-pd-t="app: connect an app button"]')))
+        sleep(1)
+        print('account done')
+
+        connect = driver.find_element(By.XPATH,'//*[@data-pd-t="app: connect an app button"]').click()
+        WebDriverWait(driver, 120).until(EC.element_to_be_clickable((By.XPATH, '//*[@placeholder="Search for an app..."]')))
+        sleep(1)
+        print('connect done')
+
+    
+        Enter_Youtube = driver.find_element(By.XPATH,'//*[@placeholder="Search for an app..."]').send_keys('youtube')
+        WebDriverWait(driver, 120).until(EC.element_to_be_clickable((By.XPATH, '//*[@placeholder="Search for an app..."]')))
+        print('enter youtube done')
+
+        sleep(1.5)
+
+
+
+        choose = driver.find_element(By.XPATH,'//*[@placeholder="Search for an app..."]').send_keys(Keys.TAB)
+        print('choose done')
+        driver.get_screenshot_as_file("choo.png")
+
+
+        sleep(1)
+        driver.find_element(By.XPATH,'//*[@id="modal-container"]/div[9]/div/div/div/div[2]/div/div/div[3]/div/button[1]').send_keys(Keys.ENTER)
+        sleep(2)
+        #POPUP
+        driver.switch_to.window(driver.window_handles[1])
+        # driver.maximize_window()
+        print(driver.title)
+        currnet_url = driver.current_url
+        print(currnet_url)
+        driver.switch_to.window(driver.window_handles[0])
+
+        driver.get(currnet_url)
+        sleep(3)
+
+        WebDriverWait(driver, 120).until(EC.element_to_be_clickable((By.XPATH, '//*[@type="email"]')))
+        print('popup done')
+
+        sleep(1)
+        pop_email = driver.find_element(By.XPATH,'//*[@type="email"]').send_keys('ahmedyehia10012@gmail.com')
+        sleep(1.5)
+        driver.find_element(By.XPATH,'//*[@type="email"]').send_keys(Keys.ENTER)
+        driver.get_screenshot_as_file("screenshot.png")
+        sleep(1)
+        # next = driver.find_element(By.LINK_TEXT,'التالي')
+        # next.click()
+        print('enterd')
+        print(driver.title)
+        driver.get_screenshot_as_file("screenshot.png")
+        sleep(1.5)
+        pop_pass = driver.find_element(By.XPATH,'//*[@type="password"]').send_keys('01539570')
+        # WebDriverWait(driver, 120).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="passwordNext"]/div/button/span')))
+        sleep(1.5)
+        print('pop pass done')
+        print(driver.title)
+
+        passwordNext = driver.find_element(By.XPATH,'//*[@id="passwordNext"]/div/button/span').click()
+        sleep(1.5)
+        #Choose Channel
+        asf = driver.find_elements(By.CLASS_NAME,'WBW9sf')
+        for na in asf:
+            nam = na.find_element(By.CLASS_NAME,'w1I7fb')
+            channel = (nam.text)
+            if channel == 'باب الحارة الجزء السابع':
+                nam.click()
+                sleep(2)
+                break
+        print('choose channel  done')
+
+        sleep(1.5)
+
+        #Allow
+        WebDriverWait(driver, 120).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="submit_approve_access"]')))
+        sleep(1)
+        allow = driver.find_element(By.XPATH,'//*[@id="submit_approve_access"]').click()
+        sleep(3)
+        driver.switch_to.window(driver.window_handles[0])
+        sleep(2.5)
+        print('allow done')
+
+        tit = driver.title
+        if tit == 'Connected Accounts - Pipedream':
+            print('Connected Successfully')
+        else:
+            print('Connecting Faild')
